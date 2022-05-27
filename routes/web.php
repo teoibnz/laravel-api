@@ -30,3 +30,7 @@ Route::middleware("auth")
 ->group(function(){
     Route::resource('posts', 'PostController');
 });
+
+Route::get("{any?}", function() {
+    return view("welcome");
+})->where("any", ".*");
