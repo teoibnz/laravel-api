@@ -1,11 +1,12 @@
 <template>
-    <div>
-        <Post />
+    <div class="container d-flex flex-column align-items-center">
+        <Post v-for=" (post, index) in posts" :key= 'index' :post="post" />
+        
     </div> 
 </template>
 
 <script>
-import Post from "../components/Post.vue"
+import Post from "./Post.vue"
 export default {
     name: "PostList",
 
@@ -19,8 +20,19 @@ export default {
     },
     methods : {
         getPosts(){
-            axios.get("http://127.0.0.1:8001/api/posts")
+            axios.get("http://127.0.0.1:8000/api/posts/")
+                .then((result)=>{
+                    console.log(result.data.results.data);
+                    this.posts = result.data.results.data;
+                })
+            .catch( (error) => {
+                    console.warn(error);
+                });
+            
         }
+    },
+    created(){
+        this.getPosts();
     }
 
 }

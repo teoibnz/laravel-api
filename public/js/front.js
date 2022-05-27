@@ -1911,9 +1911,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Post",
-  components: {}
+  components: {},
+  props: ["post"]
 });
 
 /***/ }),
@@ -1927,7 +1932,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_Post_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/Post.vue */ "./resources/js/components/Post.vue");
+/* harmony import */ var _Post_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Post.vue */ "./resources/js/components/Post.vue");
+//
 //
 //
 //
@@ -1938,7 +1944,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PostList",
   components: {
-    Post: _components_Post_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+    Post: _Post_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   data: function data() {
     return {
@@ -1947,8 +1953,18 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     getPosts: function getPosts() {
-      axios.get("http://127.0.0.1:8001/api/posts");
+      var _this = this;
+
+      axios.get("http://127.0.0.1:8000/api/posts/").then(function (result) {
+        console.log(result.data.results.data);
+        _this.posts = result.data.results.data;
+      })["catch"](function (error) {
+        console.warn(error);
+      });
     }
+  },
+  created: function created() {
+    this.getPosts();
   }
 });
 
@@ -1964,7 +1980,6 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_PostList_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/PostList.vue */ "./resources/js/components/PostList.vue");
-//
 //
 //
 //
@@ -2464,7 +2479,15 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("h1", [_vm._v("Ciao")])
+  return _c("div", { staticClass: "w-50 m-5 card-body text-center" }, [
+    _c("h3", [_vm._v(_vm._s(_vm.post.username))]),
+    _vm._v(" "),
+    _c("img", { attrs: { src: _vm.post.cover_url, alt: _vm.post.username } }),
+    _vm._v(" "),
+    _c("p", { staticClass: "p-2 text-center" }, [
+      _vm._v(_vm._s(_vm.post.description) + " "),
+    ]),
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -2488,7 +2511,14 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_c("Post")], 1)
+  return _c(
+    "div",
+    { staticClass: "container d-flex flex-column align-items-center" },
+    _vm._l(_vm.posts, function (post, index) {
+      return _c("Post", { key: index, attrs: { post: post } })
+    }),
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -2512,7 +2542,7 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_c("PostList"), _vm._v(" "), _c("h1", [_vm._v("Ciao")])], 1)
+  return _c("div", [_c("PostList")], 1)
 }
 var staticRenderFns = []
 render._withStripped = true
